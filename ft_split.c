@@ -6,65 +6,57 @@
 /*   By: ialvarez <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/15 13:01:20 by ialvarez          #+#    #+#             */
-/*   Updated: 2021/04/18 21:13:13 by ialvarez         ###   ########.fr       */
+/*   Updated: 2021/04/19 19:50:12 by ialvarez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+static	void	ft_cachopo(char **dst, char const *init, char c)
+{
+	int			i;
+	char const	*start;
+
+	i = 0;
+	while (*init)
+	{
+		if (*init != c)
+		{
+			start = init;
+			while (*init != c && *init)
+				init++;
+			dst[i++] = ft_substr(start, 0, init - start);
+		}
+		else
+			init++;
+	}
+	dst[i] = NULL;
+}
+
 char	**ft_split(char const *s, char c)
 {
-	int	i;
-	int xu;
-	int as;
-	char	**dst;
-	char	const *dir;
+	int			i;
+	char		**dst;
+	char const	*init;
 
+	init = s;
+	i = 0;
 	if (!s)
-	  	return (NULL);
-	dir = &s[0];
-	i = 0;
-	while (*dir)
+		return (NULL);
+	while (*s)
 	{
-	  	if (*dir != c && *dir - 1 == c)
-			i++;
-		dir++;
-	}
-	dst = (char **)malloc(i + 1 * sizeof(char *));
-	i = 0;
-	while (*dir)
-	{
-		if (*dir != c)
-			i++;
-		if ((*dir == c || *dir + 1 == '\0') && *dir != c)
+		if (*s != c)
 		{
-			*dst = (char *)malloc(i + 1 * sizeof(char));
-			dst++;
-			i = 0;
-		}
-		dir++;
-	}
-	(*dst) = NULL;
-	i = 0;
-	as = 0;
-	while (*dir)
-	{
-		xu = 0;
-		while (*dir != c)
-		{
-			dst[i][as] = *dir;
-			xu = 1;
-			as++;
-			dir++;
-		}
-		if (*dir == c && xu == 1)
-		{
-	  		dst[i][as] = '\0';
-			as = 0;
 			i++;
-			dir++;
+			while (*s != c && *s)
+				s++;
 		}
+		if (*s)
+			s++;
 	}
+	dst = (char **)malloc((i + 1) * sizeof(char *));
+	if (!dst)
+		return (NULL);
+	ft_cachopo(dst, init, c);
 	return (dst);
-	free(dst);
 }
